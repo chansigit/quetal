@@ -9,4 +9,9 @@ pool1_2_CKDL240023765-1A_HHCT2DSXC,/scratch/users/chensj16/tmp/pool1_2,Gene Expr
 
 [samples]
 sample_id,probe_barcode_ids,description
-pool1_2_CKDL240023765-1A_HHCT2DSXC,BC001|BC005|BC006|BC002|BC003|BC007,Ctrl_hPSC|Ctrl_Ecto|Ctrl_Ecto-mTeSR|JARID2_hPSC|JARID2_Ecto|JARID2_Ecto-mTeSR
+Ctrl_hPSC,BC001,Ctrl_hPSC
+Ctrl_Ecto,BC005,Ctrl_Ecto
+Ctrl_Ecto-mTeSR,BC006,Ctrl_Ecto-mTeSR
+JARID2_hPSC,BC002,JARID2_hPSC
+JARID2_Ecto,BC003,JARID2_Ecto
+JARID2_Ecto-mTeSR,BC007,JARID2_Ecto-mTeSR
