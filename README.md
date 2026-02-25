@@ -23,19 +23,19 @@ flowchart TD
         raw_p1[(Pool 1 — pool1_2<br/>10x h5)]:::raw
         raw_p6[(Pool 6 — pool6_3<br/>10x h5)]:::raw
         raw_p8[(Pool 8 — pool8<br/>10x h5)]:::raw
-        raw_p4[(Pool 4<br/>6 samples<br/>10x h5)]:::raw
+        raw_p4[(Pool 4 — pool4_2<br/>6 samples · 10x h5)]:::raw
     end
 
     %% ════════════════════════════════════════════════════════
     %% NOTEBOOK 1 — Preprocess & QC
     %% ════════════════════════════════════════════════════════
     subgraph NB1["1. Preprocess & QC (pools 1/6/8)"]
-        nb1_load["Load per-sample &<br/>annotate metadata"]:::process
+        nb1_load["Load 28 samples &<br/>annotate metadata"]:::process
         nb1_qc["QC filter<br/>(min_genes=300)"]:::process
         nb1_norm["Normalize & log1p"]:::process
         nb1_cc["Cell-cycle scoring &<br/>sample annotation"]:::process
         nb1_drop["Drop outlier<br/>(Ctrl-hPSC.p6)"]:::process
-        nb1_scvi["Train scVI (3 rounds)<br/>remove MT-high &<br/>stress clusters"]:::process
+        nb1_scvi["Train scVI × 3 rounds<br/>remove MT-high &<br/>stress clusters"]:::process
         nb1_umap["UMAP + Leiden<br/>clustering"]:::process
     end
 
@@ -86,7 +86,7 @@ flowchart TD
     subgraph NB4a["4a. DEG Analysis (H1, pools 6 & 8)"]
         nb4a_sub["Subset H1 samples<br/>(pools 6 & 8)"]:::analysis
         nb4a_deg["rank_genes_groups<br/>per sample"]:::analysis
-        nb4a_heat["Heatmap"]:::analysis
+        nb4a_heat["Heatmap of top DEGs<br/>per condition"]:::analysis
     end
 
     file_canon --> nb4a_sub
@@ -95,23 +95,22 @@ flowchart TD
     nb4a_heat --> out_deg[/DEG-pool68H1-samples.csv<br/>+ heatmap PDF/]:::output
 
     %% ════════════════════════════════════════════════════════
-    %% NOTEBOOK 4b — Visualizations (H1 & JARID2)
+    %% NOTEBOOK 4b — Exploratory Visualizations
     %% ════════════════════════════════════════════════════════
-    subgraph NB4b["4b. Visualizations (H1 & JARID2)"]
-        nb4b_fig1["Subset Fig 1 samples<br/>(H1 diff. series, 7 samples)"]:::analysis
-        nb4b_fig2["Subset Fig 2 samples<br/>(Ctrl vs JARID2, 8 samples)"]:::analysis
-        nb4b_mde["MDE scatter plots<br/>& NANOG feature plots"]:::analysis
+    subgraph NB4b["4b. Exploratory Visualizations (H1 & JARID2)"]
+        nb4b_fig1["Fig 1: H1 diff. series<br/>MDE + NANOG feature plots"]:::analysis
+        nb4b_fig2["Fig 2: Ctrl vs JARID2<br/>combined & split panels"]:::analysis
         nb4b_vio["NANOG violin plots"]:::analysis
-        nb4b_prop["Cluster proportion<br/>analysis"]:::analysis
+        nb4b_prop["Cluster proportion<br/>analysis (JARID2-E4T,<br/>H1-E4T)"]:::analysis
     end
 
     file_canon --> nb4b_fig1
     file_canon --> nb4b_fig2
-    nb4b_fig1 --> nb4b_mde
-    nb4b_fig2 --> nb4b_mde
-    nb4b_mde --> nb4b_vio --> nb4b_prop
+    nb4b_fig1 --> nb4b_vio
+    nb4b_fig2 --> nb4b_vio
+    nb4b_vio --> nb4b_prop
 
-    nb4b_prop --> out_fig12[/Figure 1 & 2 PDFs<br/>MDE maps · violins/]:::output
+    nb4b_prop --> out_fig12[/Exploratory Figure PDFs/]:::output
 
     %% ════════════════════════════════════════════════════════
     %% NOTEBOOK 4c — Pool 4 SMARCB1 Integration
@@ -135,32 +134,66 @@ flowchart TD
     nb4c_viz --> out_p4[/Pool 4 SMARCB1<br/>Figure PDFs/]:::output
 
     %% ════════════════════════════════════════════════════════
-    %% NOTEBOOK 7 — Color Fix + SOX21
+    %% NOTEBOOK 5a — Population Distribution
     %% ════════════════════════════════════════════════════════
-    subgraph NB7["7. Color Fix + SOX21 Plots"]
-        nb7_color["Fix JARID2-E4T color<br/>(#65dcee → #78599d)"]:::analysis
-        nb7_fig2["Regenerate Fig 2 MDE<br/>split Ctrl / JARID2 panels<br/>+ trajectory arrows"]:::analysis
-        nb7_violin["Regenerate violins<br/>(size=0, mean±SEM)"]:::analysis
-        nb7_sox["SOX21 MDE feature &<br/>violin plots"]:::analysis
+    subgraph NB5a["5a. Population Distribution MDE"]
+        nb5a_split["Split Ctrl vs JARID2<br/>MDE panels"]:::analysis
+        nb5a_arrows["Trajectory arrows &<br/>cluster labels"]:::analysis
     end
 
-    file_canon --> nb7_color
-    nb7_color --> nb7_fig2 --> nb7_violin --> nb7_sox
+    file_canon --> nb5a_split
+    nb5a_split --> nb5a_arrows
 
-    nb7_sox --> out_color[/Updated Figure PDFs<br/>color fix + SOX21/]:::output
+    nb5a_arrows --> out_5a[/figures/Figure2.Samples.<br/>MDEmap.pdf/]:::output
+
+    %% ════════════════════════════════════════════════════════
+    %% NOTEBOOK 5b — Violin Plots
+    %% ════════════════════════════════════════════════════════
+    subgraph NB5b["5b. Gene Violin Plots"]
+        nb5b_fig1["Fig 1 violins<br/>(H1 series, 7 samples)"]:::analysis
+        nb5b_fig2["Fig 2 violins<br/>(Ctrl vs JARID2,<br/>interleaved)"]:::analysis
+        nb5b_genes["12 genes: NANOG, SOX21,<br/>OTX2, ZIC1, NES, SOX1,<br/>MAP2, COL2A1, TFAP2C,<br/>CDH11, FOSL1, NFATC4"]:::analysis
+    end
+
+    file_canon --> nb5b_fig1
+    file_canon --> nb5b_fig2
+    nb5b_fig1 --> nb5b_genes
+    nb5b_fig2 --> nb5b_genes
+
+    nb5b_genes --> out_5b[/figures/Figure{1,2}.<br/>GENE.violin.pdf/]:::output
+
+    %% ════════════════════════════════════════════════════════
+    %% NOTEBOOK 5c — MDE Feature Scatter Plots
+    %% ════════════════════════════════════════════════════════
+    subgraph NB5c["5c. Gene MDE Feature Plots"]
+        nb5c_hull["Compute concave hull<br/>(all 27 samples)"]:::analysis
+        nb5c_fig1["Fig 1 feature plots<br/>(per-sample, 7 panels)"]:::analysis
+        nb5c_fig2["Fig 2 feature plots<br/>(per-sample, 8 panels)"]:::analysis
+        nb5c_genes["12 genes × 2 figures"]:::analysis
+    end
+
+    file_canon --> nb5c_hull
+    nb5c_hull --> nb5c_fig1
+    nb5c_hull --> nb5c_fig2
+    nb5c_fig1 --> nb5c_genes
+    nb5c_fig2 --> nb5c_genes
+
+    nb5c_genes --> out_5c[/figures/Figure{1,2}.<br/>GENE.MDEmap.pdf/]:::output
 ```
 
 ## Notebooks
 
 | # | Notebook | Description |
 |---|----------|-------------|
-| 1 | `1.preprocess-qc-pools168.ipynb` | Load raw 10x data from pools 1/6/8 (28 samples), QC filtering, normalization, cell-cycle scoring, iterative scVI training (3 rounds removing MT-high & stress clusters), UMAP + Leiden clustering |
-| 2 | `2.scvi-nuisance-regression.ipynb` | Define nuisance gene sets (stress, MT, sex, cell cycle), regress out via scVI covariates, select top 1000 HVGs, retrain scVI (60 epochs), compute MDE embedding |
-| 3 | `3.harmony-reference-mde-projection.ipynb` | Harmony batch correction on scVI latent space, build reference MDE from 12 control samples, project 15 KD query samples via anchored embedding, compute diffusion map |
-| 4a | `4a.deg-h1-pool68.ipynb` | Differential expression analysis for H1 samples in pools 6 & 8 |
-| 4b | `4b.visualizations-h1-jarid2.ipynb` | Figure 1 (H1 differentiation series) and Figure 2 (Ctrl vs JARID2-KD) MDE maps, NANOG feature/violin plots, cluster proportion analysis |
-| 4c | `4c.pool4-smarcb1-integration.ipynb` | Integrate pool 4 SMARCB1-KD data (6 samples), retrain scVI across all 4 pools, project onto canonical MDE, generate SMARCB1 figures |
-| 7 | `color-fix/color-fix-sox21-plots.ipynb` | Fix JARID2-E4T color palette, regenerate Fig 2 with split panels + trajectory arrows, add SOX21 feature/violin plots |
+| 1 | `1.preprocess-qc-pools168.ipynb` | Load raw 10x data from pools 1/6/8 (28 samples), QC filtering (min_genes=300), normalization, cell-cycle scoring, drop outlier (Ctrl-hPSC.p6), iterative scVI training (3 rounds removing MT-high & stress clusters), UMAP + Leiden clustering |
+| 2 | `2.scvi-nuisance-regression.ipynb` | Define nuisance gene sets (stress, MT, sex, cell cycle), move to .obs covariates, remove from var, select top 1000 HVGs per batch, retrain scVI (60 epochs), compute MDE embedding |
+| 3 | `3.harmony-reference-mde-projection.ipynb` | Harmony batch correction on scVI latent (pool + background), build anchored MDE from 12 control samples, project 15 KD query samples via anchored embedding, compute diffusion map, per-sample density & NANOG plots |
+| 4a | `4a.deg-h1-pool68.ipynb` | Subset H1 samples from pools 6 & 8, rank_genes_groups per sample, extract top DEGs per condition, heatmap |
+| 4b | `4b.visualizations-h1-jarid2.ipynb` | Exploratory visualizations: Fig 1 (H1 diff. series, 7 samples) & Fig 2 (Ctrl vs JARID2, combined + split Ctrl/JARID2 panels), MDE scatter, NANOG feature maps, NANOG violins, cluster proportion analysis for JARID2-E4T and H1-E4T |
+| 4c | `4c.pool4-smarcb1-integration.ipynb` | Load pool 4 (6 samples, 3 Ctrl + 3 SMARCB1-KD), QC/normalize, merge with reference, retrain scVI (all 4 pools, 60 epochs), project SMARCB1 subset onto canonical MDE via anchored embedding, remove outlier cluster, MDE scatter + NANOG violin/feature plots |
+| 5a | `5a.population-distribution-mde.ipynb` | Split Ctrl vs JARID2-CRISPRi MDE panels with trajectory arrows, cluster labels, and MDE axis indicators. JARID2-E4T color: #78599d |
+| 5b | `5b.gene-violin-plots.ipynb` | Violin plots (size=0, mean±SEM red diamonds) for 12 genes across Fig 1 (H1 series) and Fig 2 (Ctrl vs JARID2, interleaved). Genes: NANOG, SOX21, OTX2, ZIC1, NES, SOX1, MAP2, COL2A1, TFAP2C, CDH11, FOSL1, NFATC4 |
+| 5c | `5c.gene-scatter-mde.ipynb` | Per-sample MDE feature plots with concave hull contours for 12 genes. Hull computed from all 27 canonical samples. Fixed colorbar range 0–1.5. Same 12 genes as 5b |
 
 ## Key Output Files
 
@@ -168,11 +201,12 @@ flowchart TD
 |------|-------------|
 | `adata_merged.pp1.v250501.h5ad` | After preprocessing & QC (27 samples, ~124k cells) |
 | `adata_merged.250501.h5ad` | After nuisance regression & HVG selection |
-| `adata_merged.250505-canonical.h5ad` | Canonical reference with Harmony + anchored MDE projections |
+| `adata_merged.250505-canonical.h5ad` | Canonical reference with Harmony + anchored MDE projections (27 samples, 123,822 cells, 17,960 genes) |
 | `adata_merged_pool1468.250505.h5ad` | All 4 pools merged with retrained scVI |
-| `pool4_merged.250505.h5ad` | Pool 4 integration intermediate |
-| `pool4_SMARCB1_merged.h5ad` | SMARCB1 subset projected onto canonical MDE |
+| `pool4_merged.250505.h5ad` | Pool 4 integration intermediate (6 samples, ~31k cells) |
+| `pool4_SMARCB1_merged.h5ad` | SMARCB1 subset projected onto canonical MDE (~17k cells after outlier removal) |
 | `DEG-pool68H1-samples.csv` | Differentially expressed genes for H1 pools 6 & 8 |
+| `figures/` | All publication-quality figure PDFs (MDE maps, violins, feature plots) |
 
 ## Flowchart Legend
 
