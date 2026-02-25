@@ -1,0 +1,13 @@
+# Large data files
+*.h5ad
+*.h5
+
+# scVI model checkpoints
+scvi-model-*/
+
+# macOS metadata
+.DS_Store
+._*
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
