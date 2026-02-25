@@ -1,4 +1,11 @@
-# Workflow-250505: scRNA-seq Analysis Pipeline
+# quetal
+
+Single-cell RNA-seq analysis codes for the research Qu et al.
+The `cellranger-scripts` folder holds scripts and configs for executing the cellranger multi pipeline.
+
+---
+
+## Workflow-250505: scRNA-seq Analysis Pipeline
 
 Single-cell RNA-seq data processing pipeline for hPSC differentiation and chromatin remodeler knockdown experiments across 4 multiplexed pools (pools 1, 4, 6, 8).
 

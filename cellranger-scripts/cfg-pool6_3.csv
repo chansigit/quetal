@@ -1,0 +1,21 @@
+[gene-expression]
+reference,/oak/stanford/groups/xiaojie/chensj16/data/ref10x/refdata-gex-GRCh38-2020-A
+probe-set,/oak/stanford/groups/xiaojie/chensj16/software/cellranger-8.0.1/probe_sets/Chromium_Human_Transcriptome_Probe_Set_v1.0.1_nanogpou5f1_GRCh38-2020-A.csv
+create-bam,true
+
+[libraries]
+fastq_id,fastqs,feature_types
+pool6_3_CKDL240020443-1A_HHC7LDSXC,/scratch/users/chensj16/tmp/pool6_3,Gene Expression
+
+[samples]
+sample_id,probe_barcode_ids,description
+Ctrl_hPSC,BC004,Ctrl_hPSC
+Ctrl_12hEcto,BC010,Ctrl_12hEcto
+Ctrl_24hEcto,BC001,Ctrl_24hEcto
+Ctrl_12hEcto-mTeSR,BC011,Ctrl_12hEcto-mTeSR
+Ctrl_24hEcto-mTeSR,BC002,Ctrl_24hEcto-mTeSR
+H1_hPSC,BC012,H1_hPSC
+H1_12hEcto,BC013,H1_12hEcto
+H1_24hEcto,BC014,H1_24hEcto
+H1_12hEcto-mTeSR,BC015,H1_12hEcto-mTeSR
+H1_24hEcto-mTeSR,BC016,H1_24hEcto-mTeSR
