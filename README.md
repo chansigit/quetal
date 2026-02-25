@@ -167,7 +167,7 @@ flowchart TD
     nb5b_fig1 --> nb5b_genes
     nb5b_fig2 --> nb5b_genes
 
-    nb5b_genes --> out_5b[/figures/Figure{1,2}.<br/>GENE.violin.pdf/]:::output
+    nb5b_genes --> out_5b[/"figures/Figure 1,2 .<br/>GENE.violin.pdf"/]:::output
 
     %% ════════════════════════════════════════════════════════
     %% NOTEBOOK 5c — MDE Feature Scatter Plots
@@ -185,7 +185,7 @@ flowchart TD
     nb5c_fig1 --> nb5c_genes
     nb5c_fig2 --> nb5c_genes
 
-    nb5c_genes --> out_5c[/figures/Figure{1,2}.<br/>GENE.MDEmap.pdf/]:::output
+    nb5c_genes --> out_5c[/"figures/Figure 1,2 .<br/>GENE.MDEmap.pdf"/]:::output
 ```
 
 ## Notebooks
