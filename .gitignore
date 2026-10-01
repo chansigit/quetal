@@ -11,3 +11,8 @@ scvi-model-*/
 
 # Jupyter checkpoints
 .ipynb_checkpoints/
+
+# regenerable caches and local backups
+*.parquet
+*.bak-*
+.git.broken-*/
