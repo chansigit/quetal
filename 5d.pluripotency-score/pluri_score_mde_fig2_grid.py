@@ -1,7 +1,7 @@
 """Figure 2 (supplement): per-sample pluripotency-score MDE panels, Control (top row) vs
 JARID2-CRISPRi (bottom row), one column per condition, in the style of the Figure 1G panels
-(dashed concave-hull outline of all 27 samples, same colormap). Colour range 0.05 .. 99.5th
-percentile of the 8 samples shown (as in Figure2.PluriScore.MDEmap.pdf).
+(dashed concave-hull outline of all 27 samples, same colormap). Colour range 0.10 .. 0.30 (fixed); per-panel
+fraction of cells with score > 0.15. Options: --vmin --vmax --vmax-pct --thr --decimals --tag.
 
     python 5d.pluripotency-score/pluri_score_mde_fig2_grid.py
 """
@@ -31,14 +31,19 @@ def main():
     df, hull = base.load()
     samples = [s for _, r in ROWS for s in r]
     d = df[df['sample'].isin(samples)]
-    vmin = 0.05
-    # upper bound from the two 4d samples (95th pct), so that high-scoring reverted cells saturate
+    def opt(name, default, cast=float):
+        return cast(sys.argv[sys.argv.index(name) + 1]) if name in sys.argv else default
+    vmin = opt('--vmin', 0.10)
+    # upper bound: fixed via --vmax, else a percentile of the two 4d samples so that reverted cells saturate
     d4 = d[d['sample'].isin(['H1-E4T.3', 'JARID2-E4T'])]
-    VMAX_PCT = float(sys.argv[sys.argv.index('--vmax-pct') + 1]) if '--vmax-pct' in sys.argv else 99
-    vmax = float(np.round(np.percentile(d4[base.SCORE], VMAX_PCT), 2))
-    tag = sys.argv[sys.argv.index('--tag') + 1] if '--tag' in sys.argv else ''
-    THR = 0.1   # per-panel annotation: fraction of cells above this score
-    print(f'colorbar range: {vmin} .. {vmax}  ({VMAX_PCT:g}th pct of the two 4d samples)')
+    VMAX_PCT = opt('--vmax-pct', 99)
+    vmax = opt('--vmax', 0.30)   # fixed; pass --vmax-pct to derive it from the 4d samples instead
+    if '--vmax-pct' in sys.argv and '--vmax' not in sys.argv:
+        vmax = float(np.round(np.percentile(d4[base.SCORE], VMAX_PCT), 2))
+    THR = opt('--thr', 0.15)         # per-panel annotation: fraction of cells above this score
+    DEC = opt('--decimals', 1, int)  # decimals of the percentage
+    tag = opt('--tag', '', str)
+    print(f'colorbar range: {vmin} .. {vmax}; annotation threshold {THR}')
     bounds = base.hull_bounds(hull, pad=0.05)
 
     fig, axes = plt.subplots(2, 4, figsize=(11.2, 6.0))
@@ -48,7 +53,7 @@ def main():
             sub = d[d['sample'] == s_]
             m = base.score_scatter(ax, sub, hull, bounds, vmin, vmax)
             frac = (sub[base.SCORE] > THR).mean()
-            ax.text(0.02, 0.97, f'score > {THR:g}:\n{frac:.0%} of cells', transform=ax.transAxes,
+            ax.text(0.02, 0.97, f'score > {THR:g}:\n{frac * 100:.{DEC}f}% of cells', transform=ax.transAxes,
                     fontsize=10, ha='left', va='top', linespacing=1.1)
     for ax, title in zip(axes[0], COLS):
         ax.set_title(title, fontsize=13, pad=6, linespacing=1.15)

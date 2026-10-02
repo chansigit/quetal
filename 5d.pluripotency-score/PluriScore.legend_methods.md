@@ -36,8 +36,8 @@ File: `../figures/Figure2.PluriScore.MDEmap.grid.pdf` · code `pluri_score_mde_f
 
 ## Figure legend
 
-**Per-sample pluripotency score on the MDE embedding, control (top) and *JARID2*-CRISPRi (bottom).** Columns: hPSC, 24 h ectoderm, and 24 h ectoderm returned to pluripotency medium for 1 or 4 days. Colour, pluripotency score from 0.05 (grey) to 0.29 (blue; 99th percentile of the two 4-day samples). Dashed line, outline of all cells in the dataset. Numbers, fraction of cells of the sample with a score above 0.1.
+**Per-sample pluripotency score on the MDE embedding, control (top) and *JARID2*-CRISPRi (bottom).** Columns: hPSC, 24 h ectoderm, and 24 h ectoderm returned to pluripotency medium for 1 or 4 days. Colour, pluripotency score from 0.10 (grey) to 0.30 (blue). Dashed line, outline of all cells in the dataset. Numbers, percentage of cells of the sample with a score above 0.15.
 
 ## Methods (addition)
 
-The grid uses the same embedding, hull and score as Figure 1G. The colour range was set from the two 4-day samples (0.05 to their 99th percentile, 0.29) so that cells re-acquiring a high score are resolved; the fraction of cells with score > 0.1 is given per panel as a threshold-based summary. In the 4-day condition this fraction is 12 % (control) vs 30 % (*JARID2*-CRISPRi), and 27 % vs 52 % of cells lie within the hPSC region of the embedding, whereas the median score of cells already inside the hPSC region is similar between the two (0.063 vs 0.072).
+The grid uses the same embedding, hull and score as Figure 1G. The colour range was fixed at 0.10–0.30 so that cells re-acquiring a high score are resolved against the bulk of low-scoring cells; the percentage of cells with score > 0.15 is given per panel as a threshold-based summary (full threshold table in `pluri_score.threshold_fractions.csv`). In the 4-day condition this is 5.0 % (control) vs 16.6 % (*JARID2*-CRISPRi; 3.3-fold), and 27 % vs 52 % of cells lie within the hPSC region of the embedding, whereas the median score of cells already inside the hPSC region is similar between the two (0.063 vs 0.072).
