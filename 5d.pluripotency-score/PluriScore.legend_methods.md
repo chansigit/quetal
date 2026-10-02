@@ -27,3 +27,17 @@ Files: `../figures/Figure2.PluriScore.MDEmap.pdf` (top, code `pluri_score_mde_fi
 ## Methods (additions)
 
 **Figure 2 panels.** The MDE coordinates, score and colour map are those described above; the two MDE panels share axis limits, and the colour range was set to 0.05–0.34 (99.5th percentile of the score over the eight Figure 2 samples). Violins were drawn with seaborn (`cut = 0`, `density_norm = 'width'`, no inner marks) and coloured as the sample map in Figure 2. For each condition, per-cell scores of *JARID2*-CRISPRi and control cells were compared with a two-sided Mann–Whitney U test, and the difference of medians (Δ) is reported as effect size (n = 1,224–11,926 cells per group; all P < 1e-30, see `Figure2.PluriScore.violin.stats.csv`). Because these are per-cell tests on thousands of cells, effect sizes (median difference 0.03–0.09 score units) are more informative than the P values.
+
+---
+
+# Figure 2 (supplementary grid) – per-sample score maps, Control vs *JARID2*-CRISPRi
+
+File: `../figures/Figure2.PluriScore.MDEmap.grid.pdf` · code `pluri_score_mde_fig2_grid.py`
+
+## Figure legend
+
+**Per-sample pluripotency score on the MDE embedding, control (top) and *JARID2*-CRISPRi (bottom).** Columns: hPSC, 24 h ectoderm, and 24 h ectoderm returned to pluripotency medium for 1 or 4 days. Colour, pluripotency score from 0.05 (grey) to 0.29 (blue; 99th percentile of the two 4-day samples). Dashed line, outline of all cells in the dataset. Numbers, fraction of cells of the sample with a score above 0.1.
+
+## Methods (addition)
+
+The grid uses the same embedding, hull and score as Figure 1G. The colour range was set from the two 4-day samples (0.05 to their 99th percentile, 0.29) so that cells re-acquiring a high score are resolved; the fraction of cells with score > 0.1 is given per panel as a threshold-based summary. In the 4-day condition this fraction is 12 % (control) vs 30 % (*JARID2*-CRISPRi), and 27 % vs 52 % of cells lie within the hPSC region of the embedding, whereas the median score of cells already inside the hPSC region is similar between the two (0.063 vs 0.072).
