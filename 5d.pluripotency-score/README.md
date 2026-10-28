@@ -10,3 +10,7 @@ Run from `workflow-250505/` with the dl2025 venv (`source ~/pp`), e.g. `python 5
 | `pluri_score_violin_fig2.py` | `figures/Figure2.PluriScore.violin.pdf`, `.stats.csv` | Fig 2B bottom: violins, medians, Δ median, two-sided Mann-Whitney U. Needs the cache. |
 
 Gene set: NANOG, FOXD3, GDF3, UTF1, TERT, PRDM14, DPPA3, DPPA5. Legends and methods: `PluriScore.legend_methods.md` (this directory).
+
+## Compact counts object
+
+`make_counts_h5ad.py <in> <out>` rewrites the canonical object with raw UMI counts as `X` (CSR, gzip) and drops the log-normalised matrix and the duplicate `layers['counts']`; obs/var/obsm/obsp/uns are kept. 6.56 GB -> 1.02 GB, verified element-wise against the source. `check_counts_h5ad.py <h5ad>` re-opens the result and runs sanity checks. Both need ~8-12 GB RAM: run on a compute node (`srun -p dev --mem=16G`), not a login node. Output lives in `/oak/stanford/projects/eca/sc-data/yimiao-quetal/adata_merged.250505-canonical.counts.h5ad`. Note: the original log-normalised X cannot be reproduced exactly from these counts (normalisation was done before nuisance genes were removed from `var`).
